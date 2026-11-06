@@ -397,8 +397,9 @@ main.isempty>:not(.empty){display:none}
 
 
 /* ===== folder counts and the note-link picker ===== */
-.fh .c{min-width:18px;height:18px;padding:0 5px;display:inline-grid;place-items:center;border-radius:999px;background:var(--tile);color:var(--muted);font-size:.68rem;font-weight:600;line-height:1;opacity:.85}
-.fh:hover .c{background:var(--border);opacity:1}
+.fh .c,aside .fh .c,aside.soft .fh .c{min-width:18px;height:18px;padding:0 5px;display:inline-grid;place-items:center;border-radius:999px;background:var(--tile);color:var(--muted);font-size:calc(.68rem*var(--sb-scale,1));font-weight:600;line-height:1;opacity:.85}
+aside.soft .fh .c::before,aside.soft .fh .c::after{content:none}
+.fh:hover .c,aside.soft .fh:hover .c{background:var(--border);opacity:1}
 .ac{width:min(440px,calc(100vw - 16px))}.ac.wide{width:min(720px,calc(100vw - 16px))}
 .ac #aci{padding-right:42px}
 .acx{position:absolute;top:10px;right:12px;width:28px;height:28px;border:0;background:none;border-radius:8px;cursor:pointer;color:var(--muted);display:grid;place-items:center}
@@ -1379,7 +1380,8 @@ var GUIDE=[
 '## Writing','',
 '- Write on the left, preview on the right. Switch with **Write**, **Split** and **Preview** above the editor.',
 '- The toolbar inserts headings, lists, tables and more. Standard Markdown works everywhere.',
-'- Press **Ctrl+K** to jump to any note by title, and **Ctrl+\\** for focus mode.','',
+'- Press **Ctrl+K** to jump to any note by title, and **Ctrl+\\** for focus mode.',
+'- Start a line with a dash and a space for a bullet. Press Enter for the next bullet, and Enter on an empty bullet to end the list.','',
 '## Folders and details','',
 'The block between the two `---` lines at the top of a note holds its title, category, subcategory, tags and date. Change the category there to move the note to another folder in the sidebar.','',
 '## Linking notes','',
@@ -1454,6 +1456,22 @@ $('imgView').insertAdjacentHTML('afterend','<button type="button" class="vwbtn" 
 $('imgDel').onclick=function(){if(selIx>=0)delImg(selIx)};
 document.addEventListener('keydown',function(e){if(selIx<0||(e.key!=='Delete'&&e.key!=='Backspace'))return;if(e.target.closest&&e.target.closest('textarea,input,select,[contenteditable],#ivw'))return;e.preventDefault();delImg(selIx)});
 
+
+
+/* Enter on a bullet line starts the next bullet; Enter on an empty bullet ends the list */
+$('ed').addEventListener('keydown',function(e){
+  if(e.key!=='Enter'||e.shiftKey||e.ctrlKey||e.metaKey||e.altKey||e.isComposing)return;
+  var t=this,v=t.value,a=t.selectionStart,b=t.selectionEnd;if(a!==b)return;
+  var ls=v.lastIndexOf('\n',a-1)+1,le=v.indexOf('\n',a);if(le<0)le=v.length;
+  var m=v.slice(ls,le).match(/^- (\[[ xX]\] )?/);if(!m)return;
+  var mk=m[0],end=ls+mk.length;if(a<end)return;
+  e.preventDefault();
+  var empty=v.slice(end,le).trim()==='';
+  function put(txt,from,to){t.setSelectionRange(from,to);var ok=false;try{ok=document.execCommand&&document.execCommand('insertText',false,txt)}catch(x){}
+    if(!ok){t.value=v.slice(0,from)+txt+v.slice(to);t.setSelectionRange(from+txt.length,from+txt.length);dirty()}}
+  if(empty)put('',ls,le);                              /* empty bullet: remove it, list ends */
+  else put('\n'+(m[1]?'- [ ] ':'- '),a,a);             /* next bullet (a new task starts unchecked) */
+});
 
 /* link picker: wider by default, with a button to widen it more (remembered) */
 function acPlace(){var a=$('ac'),w=a.getBoundingClientRect().width||440,l=parseFloat(a.style.left)||8;a.style.left=Math.max(8,Math.min(l,innerWidth-w-8))+'px'}

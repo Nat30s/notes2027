@@ -3,18 +3,10 @@
 
 
 
-- when i hover over a note, a cross x button should be displayed to delete the note, Move all trashed notes to Trashed category
-- Need empty notes at homepage with a small guide note always present, on how it works
 
 
-
-6 Nov 26
-- Give a settings button at top bar, when clicked, it opens these buttons under it, give option to choose which buttons stays at top bar or hidden under settings. Give option to save these settings in export also please. 
-- After the (Write|Split|Preview) remove the 3 dots and rename, delete, copy option. Move the the copy option as a button after the undo redo tab
-- Possible to delete image by selecting image, example when image is selected, i click the delete keyboard button and also give a delete button in the image menu afer open image viewer button?
-
-# v1 
-- Date - 55 Nov 26
+# v1 a,b,c
+- Date - 5 Nov 26
 - AI Used - Claude
 #### Changes List
 - cross x button to delete note on hover, note moves to delete category or box
@@ -26,6 +18,7 @@
 - Better cleaner design for number of notes, instead of (1)
 - Typing "-" doesnt convert to bullet, fixed
 - Search notes link window, added opttion to widen it
+
 
 
 

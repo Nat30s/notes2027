@@ -1,6 +1,11 @@
 
 
-
+# v2
+- Date - 7 Nov 26
+- AI Used - Claude
+#### Changes List
+- Notes interlink via id
+- Update interlinked note title in both editor and preview, after title updates, only when specific note containing link opens, not full notes library
 
 
 
